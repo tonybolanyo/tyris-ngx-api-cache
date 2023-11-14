@@ -1,24 +1,67 @@
-# NgxApiCache
+# Tyris NgxApiCache
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.0.
+This library provides a simple cache mechanism for every
+backend http call based on two main elements:
 
-## Code scaffolding
+- `ApiCacheInterceptor`: intercept every request and decide
+  if request have to be performed or a valid cached result
+  is available.
+- `ApiCacheService`: manage cache status and operations.
 
-Run `ng generate component component-name --project ngx-api-cache` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project ngx-api-cache`.
-> Note: Don't forget to add `--project ngx-api-cache` or else it will be added to the default project in your `angular.json` file. 
+## Installation
 
-## Build
+- With npm: `npm install @tyris/ngx-api-cache`
+- With yarn: `yarn add @tyris/ngx-api-cache`
 
-Run `ng build ngx-api-cache` to build the project. The build artifacts will be stored in the `dist/` directory.
+## How to use
 
-## Publishing
+1. Import module in `app.module.ts`
+2. Configure cache operation parameters (or use the default ones)
 
-After building your library with `ng build ngx-api-cache`, go to the dist folder `cd dist/ngx-api-cache` and run `npm publish`.
+```ts
+import { ApiCacheModule } from "@tyris/ngx-api-cache";
 
-## Running unit tests
+...
 
-Run `ng test ngx-api-cache` to execute the unit tests via [Karma](https://karma-runner.github.io).
+@NgModule({
+  declarations: [],
+  imports: [
+    ...,
+    ApiCacheModule.forRoot({}),
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+...
+```
 
-## Further help
+Now, every http call will be intercepted and
+cached for the number of minutes stored in
+`timeToLive` property.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+## Configuration parameters available
+
+You could override default parameters to
+customize cache operation. This is a full
+configuration object with default values:
+
+```ts
+
+const config: ApiCacheConfig {
+  clearInterval: 15,
+  requestNoCacheHeader: 'X-No-Cache',
+  responseHeader: 'X-Cached-Response',
+  timeToLive: 5,
+}
+
+```
+
+## Invalidate cache entries
+
+**Note:** all entries are stored in memory so
+any page refresh clear all cache entries.
+
+You can invalidate any key using the method
+`invalidateKey(url)` from `ApiCacheService`.
+To clear all saved entries, simply use the
+`invalidateAll()` method.
