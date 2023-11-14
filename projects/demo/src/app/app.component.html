@@ -1,0 +1,57 @@
+<div class="container"
+     *ngIf="planets$ | async as planets; else loading">
+  <table class="planets">
+    <thead>
+      <th>Name</th>
+      <th>Population</th>
+      <th>Rotation period (h)</th>
+      <th>Orbital period (d)</th>
+    </thead>
+    <tbody>
+      <tr class="planet"
+          *ngFor="let planet of planets.results">
+        <td>
+          {{ planet.name }}
+        </td>
+        <td>
+          {{ planet.population }}
+        </td>
+        <td>
+          {{ planet.rotation_period }}
+        </td>
+        <td>
+          {{ planet.orbital_period }}
+        </td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td class="prev-action"
+            colspan="2">
+          <button type="button"
+                  class="btn btn-secondary"
+                  (click)="loadPlanets(planets.previous)"
+                  *ngIf="planets.previous">Previous page</button>
+        </td>
+        <td class="next-action"
+            colspan="2">
+          <button type="button"
+                  class="btn btn-secondary"
+                  (click)="loadPlanets(planets.next)"
+                  *ngIf="planets.next">Next page</button>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <ty-api-cache-debugger></ty-api-cache-debugger>
+</div>
+
+<ng-template #loading>
+  <div class="loader">
+    <div class="spinner-border text-secondary"
+         role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+</ng-template>
