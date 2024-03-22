@@ -29,7 +29,7 @@ export class ApiCacheModule {
         {
           provide: HTTP_INTERCEPTORS,
           useClass: ApiCacheInterceptor,
-          multi: false
+          multi: true
         },
       ]
     };
