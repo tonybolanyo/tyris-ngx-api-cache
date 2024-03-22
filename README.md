@@ -1,27 +1,67 @@
-# TyrisNgxApiCache
+# Tyris NgxApiCache
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.7.
+This library provides a simple cache mechanism for every
+backend http call based on two main elements:
 
-## Development server
+- `ApiCacheInterceptor`: intercept every request and decide
+  if request have to be performed or a valid cached result
+  is available.
+- `ApiCacheService`: manage cache status and operations.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## Installation
 
-## Code scaffolding
+- With npm: `npm install @tyris/ngx-api-cache`
+- With yarn: `yarn add @tyris/ngx-api-cache`
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## How to use
 
-## Build
+1. Import module in `app.module.ts`
+2. Configure cache operation parameters (or use the default ones)
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+```ts
+import { ApiCacheModule } from "@tyris/ngx-api-cache";
 
-## Running unit tests
+...
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+@NgModule({
+  declarations: [],
+  imports: [
+    ...,
+    ApiCacheModule.forRoot({}),
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+...
+```
 
-## Running end-to-end tests
+Now, every http call will be intercepted and
+cached for the number of minutes stored in
+`timeToLive` property.
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+## Configuration parameters available
 
-## Further help
+You could override default parameters to
+customize cache operation. This is a full
+configuration object with default values:
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+```ts
+
+const config: ApiCacheConfig {
+  clearInterval: 15,
+  requestNoCacheHeader: 'X-No-Cache',
+  responseHeader: 'X-Cached-Response',
+  timeToLive: 5,
+}
+
+```
+
+## Invalidate cache entries
+
+**Note:** all entries are stored in memory so
+any page refresh clear all cache entries.
+
+You can invalidate any key using the method
+`invalidateKey(url)` from `ApiCacheService`.
+To clear all saved entries, simply use the
+`invalidateAll()` method.

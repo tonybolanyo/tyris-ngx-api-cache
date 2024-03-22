@@ -1,6 +1,6 @@
 {
   "name": "@tyris/ngx-api-cache",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "This library provides a simple cache mechanism for every backend http call:",
   "homepage": "https://github.com/tonybolanyo/tyris-ngx-api-cache",
   "keywords": "angular cache api",
